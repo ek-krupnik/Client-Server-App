@@ -24,6 +24,7 @@ def caesar(text, key):
 def vigenere(text, key):
     ind = 0
     result = []
+    key = str(key)
 
     for line in text:
         new_line = ""
