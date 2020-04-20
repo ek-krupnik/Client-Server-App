@@ -1,52 +1,91 @@
-from collections import Counter
-import pickle
+import argparse
 
+import to_encode
+import to_decode
+import to_encrypt
 
-ALPH_SIZE = 26
-alph = "ABCDEFGHIGKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+parser = argparse.ArgumentParser(description="Encoder")
+parser.add_argument('code', type=str, help="'encode' / 'decode' / 'hack' / 'train'")
 
-def train(text, model_file):
+parser.add_argument('--cipher', type=str, help="'caesar' or 'vigenere'")
+parser.add_argument('--key', type=str, help="a number for caesar, a word for vignere")
+parser.add_argument('--input-file', type=str, help="input file")
+parser.add_argument('--output-file', type=str, help="output file")
+parser.add_argument('--text-file', type=str, help="text file for model training")
+parser.add_argument('--model-file', type=str, help="file - result of training")
 
-    cnt = Counter()
+args = parser.parse_args()
 
-    for line in text:
-        for symb in line:
+result = []
+text = []
 
-            if 'A' <= symb <= 'Z' or 'a' <= symb <= 'z':
-                cnt[symb] += 1
+if args.code == "encode" or args.code == "decode":
 
-    f = open(model_file, 'wb')
-    pickle.dump(cnt, f)
-    f.close()
+    try:
+        f = open(args.input_file, 'r')
+        text = f.readlines()                                        # as list of strings
+        f.close()
+    except AttributeError:
+        text = []
+        while True:
+            try:
+                text.append(input())
+            except EOFError:
+                break
 
-def hack(text, model_file):
+    if args.code == "encode":
+        result = to_encode.encoding(args.cipher, args.key, text)
+    elif args.code == "decode":
+        result = to_decode.decoding(args.cipher, args.key, text)
 
-    f = open(model_file, 'rb')
-    benchmark_cnt = pickle.load(f)
+    try:
+        f = open(args.output_file, 'w')
+        f.writelines(result)
+        f.close()
+    except AttributeError:
+        for i in result:
+            print (i)
 
-    test_cnt = Counter()
+elif args.code == 'train':
 
-    for line in text:
-        for symb in line:
+    try:
+        f = open(args.input_file, 'r')
+        text = f.readlines()                                        # as list of strings
+        f.close()
+    except AttributeError:
+        text = []
+        while True:
+            try:
+                text.append(input())
+            except EOFError:
+                break
 
-            if 'A' <= symb <= 'Z' or 'a' <= symb <= 'z':
-                test_cnt[symb] += 1
+    to_encrypt.train(text, args.model_file)
 
-    best_key = (0, 1e40)                                                           # key && similarity
+elif args.code == 'hack':
 
-    for key in range(0, ALPH_SIZE + 1):
+    try:
+        f = open(args.input_file, 'r')
+        text = f.readlines()                                        # as list of strings
+        f.close()
+    except AttributeError:
+        text = []
+        while True:
+            try:
+                text.append(input())
+            except EOFError:
+                break
 
-        similarity = 0
+    key = 0
+    key = to_encrypt.hack(text, args.model_file)
 
-        for symb in alph:
-            if 'A' <= symb <= 'Z':
-                new_symb = chr((ord(symb) + key - ord('A')) % ALPH_SIZE + ord('A'))
-            else:
-                new_symb = chr((ord(symb) + key - ord('a')) % ALPH_SIZE + ord('a'))
+    result = []
+    result = to_decode.decoding('caesar', key, text)
 
-            similarity += (benchmark_cnt[symb] - test_cnt[new_symb]) ** 2
-
-        if similarity < best_key[1]:
-            best_key = (key, similarity)
-
-    return best_key[0]
+    try:
+        f = open(args.output_file, 'w')
+        f.writelines(result)
+        f.close()
+    except AttributeError:
+        for i in result:
+            print (i)
