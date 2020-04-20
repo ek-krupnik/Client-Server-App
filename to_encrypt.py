@@ -1,9 +1,8 @@
 from collections import Counter
 import pickle
 
-
-ALPH_SIZE = 26
 alph = "ABCDEFGHIGKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+ALPH_SIZE = len(alph)
 
 def train(text, model_file):
 

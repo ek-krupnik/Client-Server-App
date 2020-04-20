@@ -1,5 +1,5 @@
-
-ALPH_SIZE = 26
+alph = "ABCDEFGHIGKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+ALPH_SIZE = len(alph)
 
 def caesar(text, key):
     key = int(key)
@@ -10,9 +10,9 @@ def caesar(text, key):
 
         for symb in line:
             if 'A' <= symb <= 'Z':
-                new_line += chr((ord(symb) + key - ord('A')) % ALPH_SIZE + ord('A'))
+                new_line += alph[(alph.index(symb) + key) % ALPH_SIZE]
             elif 'a' <= symb <= 'z':
-                new_line += chr((ord(symb) + key - ord('a')) % ALPH_SIZE + ord('a'))
+                new_line += alph[(alph.index(symb) + key - alph.index('a')) % ALPH_SIZE + alph.index('a')]
             else:
                 new_line += symb
 
@@ -32,12 +32,12 @@ def vigenere(text, key):
 
             if 'A' <= symb <= 'Z':
                 key.upper()
-                new_line += chr((ord(symb) + ord(key[ind]) - 2 * ord('A')) % ALPH_SIZE + ord('A'))
+                new_line += alph[(alph.index(symb) + alph.index(key[ind])) % ALPH_SIZE]
                 ind = (ind + 1) % len(key)
 
             elif 'a' <= symb <= 'z':
                 key.lower()
-                new_line += chr((ord(symb) + ord(key[ind]) - 2 * ord('a')) % ALPH_SIZE + ord('a'))
+                new_line += alph[(alph.index(symb) + alph.index(key[ind]) - 2 * alph.index('a')) % ALPH_SIZE + alph.index('a')]
                 ind = (ind + 1) % len(key)
 
             else:

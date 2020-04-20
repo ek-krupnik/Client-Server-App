@@ -19,7 +19,7 @@ args = parser.parse_args()
 result = []
 text = []
 
-if args.code == "encode" or args.code == "decode":
+def get_text():
 
     try:
         f = open(args.input_file, 'r')
@@ -32,60 +32,41 @@ if args.code == "encode" or args.code == "decode":
                 text.append(input())
             except EOFError:
                 break
+    return text
+
+def make_output(result):
+
+    try:
+        f = open(args.output_file, 'w')
+        f.writelines(result)
+        f.close()
+    except:
+        for i in result:
+            print (i)
+
+if args.code == "encode" or args.code == "decode":
+
+    text = get_text()
 
     if args.code == "encode":
         result = to_encode.encoding(args.cipher, args.key, text)
     elif args.code == "decode":
         result = to_decode.decoding(args.cipher, args.key, text)
 
-    try:
-        f = open(args.output_file, 'w')
-        f.writelines(result)
-        f.close()
-    except:
-        for i in result:
-            print (i)
+    make_output(result)
 
 elif args.code == 'train':
 
-    try:
-        f = open(args.input_file, 'r')
-        text = f.readlines()                                        # as list of strings
-        f.close()
-    except:
-        text = []
-        while True:
-            try:
-                text.append(input())
-            except EOFError:
-                break
-
+    text = get_text()
     to_encrypt.train(text, args.model_file)
 
 elif args.code == 'hack':
 
-    try:
-        f = open(args.input_file, 'r')
-        text = f.readlines()                                        # as list of strings
-        f.close()
-    except:
-        text = []
-        while True:
-            try:
-                text.append(input())
-            except EOFError:
-                break
+    text = get_text()
 
     key = 0
     key = to_encrypt.hack(text, args.model_file)
 
     result = []
     result = to_decode.decoding('caesar', key, text)
-
-    try:
-        f = open(args.output_file, 'w')
-        f.writelines(result)
-        f.close()
-    except:
-        for i in result:
-            print (i)
+    make_output(result)
