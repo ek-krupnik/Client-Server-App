@@ -25,7 +25,7 @@ if args.code == "encode" or args.code == "decode":
         f = open(args.input_file, 'r')
         text = f.readlines()                                        # as list of strings
         f.close()
-    except AttributeError:
+    except:
         text = []
         while True:
             try:
@@ -42,7 +42,7 @@ if args.code == "encode" or args.code == "decode":
         f = open(args.output_file, 'w')
         f.writelines(result)
         f.close()
-    except AttributeError:
+    except:
         for i in result:
             print (i)
 
@@ -52,7 +52,7 @@ elif args.code == 'train':
         f = open(args.input_file, 'r')
         text = f.readlines()                                        # as list of strings
         f.close()
-    except AttributeError:
+    except:
         text = []
         while True:
             try:
@@ -68,7 +68,7 @@ elif args.code == 'hack':
         f = open(args.input_file, 'r')
         text = f.readlines()                                        # as list of strings
         f.close()
-    except AttributeError:
+    except:
         text = []
         while True:
             try:
@@ -86,6 +86,6 @@ elif args.code == 'hack':
         f = open(args.output_file, 'w')
         f.writelines(result)
         f.close()
-    except AttributeError:
+    except:
         for i in result:
             print (i)
