@@ -1,7 +1,6 @@
 import argparse
 
-import to_encode
-import to_decode
+import to_code
 import to_encrypt
 
 parser = argparse.ArgumentParser(description="Encoder")
@@ -48,10 +47,7 @@ if args.code == "encode" or args.code == "decode":
 
     text = get_text()
 
-    if args.code == "encode":
-        result = to_encode.encoding(args.cipher, args.key, text)
-    elif args.code == "decode":
-        result = to_decode.decoding(args.cipher, args.key, text)
+    result = to_code.coding(args.cipher, args.key, text, args.code)
 
     make_output(result)
 
@@ -68,5 +64,5 @@ elif args.code == 'hack':
     key = to_encrypt.hack(text, args.model_file)
 
     result = []
-    result = to_decode.decoding('caesar', key, text)
+    result = to_code.coding('caesar', key, text, 'decode')
     make_output(result)

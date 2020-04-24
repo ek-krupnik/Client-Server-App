@@ -2,7 +2,16 @@ from collections import Counter
 import pickle
 
 alph = "ABCDEFGHIGKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-ALPH_SIZE = len(alph)
+ALPH_SIZE = int(len(alph) / 2)
+
+
+def upper_shift(symb, key):
+    return alph[int((alph.index(symb) + key) % ALPH_SIZE)]
+
+
+def lower_shift(symb, key):
+    return alph[int((alph.index(symb) + key) % ALPH_SIZE + alph.index('a'))]
+
 
 def train(text, model_file):
 
@@ -11,7 +20,7 @@ def train(text, model_file):
     for line in text:
         for symb in line:
 
-            if 'A' <= symb <= 'Z' or 'a' <= symb <= 'z':
+            if alph.count(symb) > 0:
                 cnt[symb] += 1
 
     f = open(model_file, 'wb')
@@ -28,20 +37,20 @@ def hack(text, model_file):
     for line in text:
         for symb in line:
 
-            if 'A' <= symb <= 'Z' or 'a' <= symb <= 'z':
+            if alph.count(symb) > 0:
                 test_cnt[symb] += 1
 
     best_key = (0, 1e40)                                                           # key && similarity
 
-    for key in range(0, ALPH_SIZE + 1):
+    for key in range(0, 2 * ALPH_SIZE + 1):
 
         similarity = 0
 
         for symb in alph:
-            if 'A' <= symb <= 'Z':
-                new_symb = chr((ord(symb) + key - ord('A')) % ALPH_SIZE + ord('A'))
+            if alph.index(symb) < 26:
+                new_symb = upper_shift(symb, key)
             else:
-                new_symb = chr((ord(symb) + key - ord('a')) % ALPH_SIZE + ord('a'))
+                new_symb = lower_shift(symb, key)
 
             similarity += (benchmark_cnt[symb] - test_cnt[new_symb]) ** 2
 
