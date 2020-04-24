@@ -1,5 +1,5 @@
 alph = "ABCDEFGHIGKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-ALPH_SIZE = len(alph)
+ALPH_SIZE = len(alph) / 2
 
 def caesar(text, key):
     key = int(key)
@@ -12,7 +12,7 @@ def caesar(text, key):
             if 'A' <= symb <= 'Z':
                 new_line += alph[(alph.index(symb) + key) % ALPH_SIZE]
             elif 'a' <= symb <= 'z':
-                new_line += alph[(alph.index(symb) + key - alph.index('a')) % ALPH_SIZE + alph.index('a')]
+                new_line += alph[int((alph.index(symb) + key - alph.index('a')) % ALPH_SIZE + alph.index('a'))]
             else:
                 new_line += symb
 
