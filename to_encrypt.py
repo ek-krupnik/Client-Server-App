@@ -44,10 +44,6 @@ def hack(text, model_file):
 
     test_cnt = cnt_histogram(text)
 
-    print (benchmark_cnt)
-    print()
-    print (test_cnt)
-
     best_key = (0, MAX_SIMILARITY)                                                           # key && similarity
 
     for key in range(0, 2 * ALPH_SIZE + 1):
@@ -65,5 +61,4 @@ def hack(text, model_file):
         if similarity < best_key[1]:
             best_key = (key, similarity)
 
-    print (best_key)
     return best_key[0]
