@@ -34,13 +34,14 @@ result = []
 text = []
 
 
-def get_text(input_file):
+def get_text(attr_name):
 
     try:
+        input_file = getattr(args, attr_name)
         f = open(input_file, 'r')
         text = f.readlines()                                        # as list of strings
         f.close()
-    except:
+    except TypeError:
         text = []
         while True:
             try:
@@ -56,26 +57,26 @@ def make_output(result):
         f = open(args.output_file, 'w')
         f.writelines(result)
         f.close()
-    except:
+    except TypeError:
         for i in result:
-            print (i)
+            print(i)
 
 
 if args.code == "encode" or args.code == "decode":
 
-    text = get_text(args.input_file)
+    text = get_text("input_file")
     result = to_code.coding(args.cipher, args.key, text, args.code)
 
     make_output(result)
 
 elif args.code == 'train':
 
-    text = get_text(args.text_file)
+    text = get_text("text_file")
     to_encrypt.train(text, args.model_file)
 
 elif args.code == 'hack':
 
-    text = get_text(args.input_file)
+    text = get_text("input_file")
 
     key = 0
     key = to_encrypt.hack(text, args.model_file)

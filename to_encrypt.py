@@ -1,23 +1,14 @@
 import pickle
-import string
+import collections
+from shifts import *
 
 
-alph = string.ascii_uppercase + string.ascii_lowercase
-ALPH_SIZE = int(len(alph) / 2)
-MAX_SIMILARITY = 1e40
-
-
-def upper_shift(symb, key):
-    return alph[(alph.index(symb) + key) % ALPH_SIZE]
-
-
-def lower_shift(symb, key):
-    return alph[(alph.index(symb) + key) % ALPH_SIZE + alph.index('a')]
+MAX_SIMILARITY = float('inf')
 
 
 def cnt_histogram(text):
 
-    cnt = {symb : 0 for symb in alph}
+    cnt = collections.defaultdict(int)
 
     for line in text:
         for symb in line:
@@ -46,15 +37,15 @@ def hack(text, model_file):
 
     best_key = (0, MAX_SIMILARITY)                                                           # key && similarity
 
-    for key in range(0, 2 * ALPH_SIZE + 1):
+    for key in range(0, ALPH_SIZE):
 
         similarity = 0
 
         for symb in alph:
             if alph.index(symb) < ALPH_SIZE:
-                new_symb = upper_shift(symb, key)
-            else:
                 new_symb = lower_shift(symb, key)
+            else:
+                new_symb = upper_shift(symb, key)
 
             similarity += (benchmark_cnt[symb] - test_cnt[new_symb]) ** 2
 
