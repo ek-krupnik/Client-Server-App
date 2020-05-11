@@ -30,12 +30,8 @@ parser_hack.add_argument('--model-file', type=str, help="file - result of traini
 
 args = parser.parse_args()
 
-result = []
-text = []
-
 
 def get_text(attr_name):
-
     try:
         input_file = getattr(args, attr_name)
         f = open(input_file, 'r')
@@ -52,7 +48,6 @@ def get_text(attr_name):
 
 
 def make_output(result):
-
     try:
         f = open(args.output_file, 'w')
         f.writelines(result)
@@ -63,24 +58,19 @@ def make_output(result):
 
 
 if args.code == "encode" or args.code == "decode":
-
     text = get_text("input_file")
     result = to_code.coding(args.cipher, args.key, text, args.code)
 
     make_output(result)
 
 elif args.code == 'train':
-
     text = get_text("text_file")
     to_encrypt.train(text, args.model_file)
 
 elif args.code == 'hack':
-
     text = get_text("input_file")
 
-    key = 0
     key = to_encrypt.hack(text, args.model_file)
 
-    result = []
     result = to_code.coding('caesar', key, text, 'decode')
     make_output(result)

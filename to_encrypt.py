@@ -7,12 +7,10 @@ MAX_SIMILARITY = float('inf')
 
 
 def cnt_histogram(text):
-
     cnt = collections.defaultdict(int)
 
     for line in text:
         for symb in line:
-
             if alph.count(symb) > 0:
                 cnt[symb] += 1
 
@@ -20,7 +18,6 @@ def cnt_histogram(text):
 
 
 def train(text, model_file):
-
     cnt = cnt_histogram(text)
 
     f = open(model_file, 'wb')
@@ -29,16 +26,13 @@ def train(text, model_file):
 
 
 def hack(text, model_file):
-
     f = open(model_file, 'rb')
     benchmark_cnt = pickle.load(f)
 
     test_cnt = cnt_histogram(text)
-
     best_key = (0, MAX_SIMILARITY)                                                           # key && similarity
 
     for key in range(0, ALPH_SIZE):
-
         similarity = 0
 
         for symb in alph:

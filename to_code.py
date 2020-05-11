@@ -2,7 +2,6 @@ from shifts import *
 
 
 def coding(cipher, key, text, code_type):
-
     result = []
     ind = 0
 
@@ -13,12 +12,10 @@ def coding(cipher, key, text, code_type):
         new_line = []
 
         for symb in line:
-
             if alph.count(symb) == 0:
                 new_line += symb
                 if isinstance(key, str):
                     ind = (ind + 1) % len(key)
-
             else:
                 if isinstance(key, str):                        # vigenere
                     if alph.index(symb) < ALPH_SIZE:            # A <= symb <= Z
