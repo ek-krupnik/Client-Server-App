@@ -121,7 +121,7 @@ def get_links(main_args):
 
 def print_possible_commands():
     for i, cmd in enumerate(COMMAND_DESCRIPTIONS):
-        print(f'{i}) {cmd}\n')
+        print(f'{i}) "{cmd}" : {COMMAND_DESCRIPTIONS[cmd]}\n')
 
 
 def main():

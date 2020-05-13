@@ -1,9 +1,9 @@
 import flask
-import lib
+import lib_server
 
 
 app = flask.Flask('Plague_Inc_Europe')
-virus = lib.EuropeVirus()
+virus = lib_server.EuropeVirus()
 
 
 def make_output(country):
