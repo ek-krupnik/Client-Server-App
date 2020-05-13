@@ -3,7 +3,7 @@ import requests
 import argparse
 import networkx as nx
 from matplotlib import pyplot as plt
-from macros import *
+from macros_client import *
 
 
 def create_parser():
