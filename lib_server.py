@@ -1,9 +1,5 @@
+from macros_server import *
 import random
-
-
-LIST_COUNTRIES = ['Germany', 'France', 'Italy', 'Spain', 'Poland', 'GreatBritain', 'Portugal', 'Austria']
-COUNTRIES_NUMBER = len(LIST_COUNTRIES)
-LINKS_NUMBER = 15
 
 
 class Country(object):
@@ -11,17 +7,20 @@ class Country(object):
     def __init__(self, id, name, is_infected):
 
         if not isinstance(id, int):
-            raise TypeError('id should be int')
+            raise TypeError(TYPE_ERROR_MSG['id'])
         if not isinstance(name, str):
-            raise TypeError('name should be str')
+            raise TypeError(TYPE_ERROR_MSG['name'])
         if not isinstance(is_infected, bool):
-            raise TypeError('is_infected should be bool')
+            raise TypeError(TYPE_ERROR_MSG['is_infected'])
         if LIST_COUNTRIES.count(name) == 0:
-            raise IndexError('wrong county name')
+            raise IndexError(INDEX_ERROR_MSG)
 
         self.id = id
         self.name = name
         self.infected = is_infected
+
+    def __str__(self):
+        return f'{str(self.name)} (ID: {str(self.id)} + ) is infected: {str(self.infected)}'
 
 
 class EuropeVirus(object):
@@ -34,31 +33,31 @@ class EuropeVirus(object):
     @staticmethod
     def get_id(country_name):
         if LIST_COUNTRIES.count(country_name) == 0:
-            raise IndexError('this country is not available')
+            raise IndexError(INDEX_ERROR_MSG)
         return LIST_COUNTRIES.index(country_name)
 
     def infect_country(self, country_name):
         country_id = self.get_id(country_name)
         self.countries[country_id].infected = True
-        self.infected_countries.add(Country(country_id, country_name, True))
+        self.infected_countries.add(self.countries[country_id])
         return country_id
 
     def get_all_info(self):
-        return self.countries
+        return [str(country) for country in self.countries]
 
     def get_info(self, country):
         if not isinstance(country, Country):
-            raise TypeError('get_info only for Country type elements')
+            raise TypeError(TYPE_ERROR_MSG['get_info'])
 
         id = self.get_id(country)
         if self.countries[id].infected:
-            return 'infected'
+            return INFECTED_MSG
         else:
-            return 'absolutely healthy'
+            return NOT_INFECTED_MSG
 
     def spread(self, country_from):
         if not isinstance(country_from, Country):
-            raise TypeError('spread only for Country type elements')
+            raise TypeError(TYPE_ERROR_MSG['spread'])
 
         for country_to in self.map[country_from.name]:
             self.countries[country_to.id].infected = True
@@ -66,14 +65,12 @@ class EuropeVirus(object):
 
     def go_days(self, time):
         if not isinstance(time, int):
-            raise TypeError('time should be int')
+            raise TypeError(TYPE_ERROR_MSG['time'])
         if time < 0:
-            raise ValueError('time should be above zero')
+            raise ValueError(VALUE_ERROR_MSG)
 
         while time > 0:
-            started = []
-            for country in self.infected_countries:
-                started.append(country)
+            started = [country for country in self.infected_countries]
             for country in started:
                 self.spread(country)
             time -= 1
@@ -89,5 +86,5 @@ class EuropeVirus(object):
 
     def get_links(self, country_name):
         if LIST_COUNTRIES.count(country_name) == 0:
-            raise IndexError('wrong county name')
+            raise IndexError(INDEX_ERROR_MSG)
         return str(list(country.name for country in self.map[country_name]))

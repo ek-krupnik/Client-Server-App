@@ -1,13 +1,10 @@
 import flask
 import lib_server
+from macros_server import *
 
 
 app = flask.Flask('Plague_Inc_Europe')
 virus = lib_server.EuropeVirus()
-
-
-def make_output(country):
-    return str(country.name) + ' (ID: ' + str(country.id) + ') is infected: ' + str(country.infected)
 
 
 @app.route('/infect', methods=['POST'])
@@ -19,10 +16,7 @@ def infect_country():
 
 @app.route('/get_all_info', methods=['GET'])
 def get_all_info():
-    res = ''
-    for country in virus.get_all_info():
-        res += make_output(country) + '\n'
-    return res
+    return "\n".join(virus.get_all_info())
 
 
 @app.route('/get_info', methods=['GET'])
@@ -50,7 +44,7 @@ def get_links():
 
 
 def main():
-    app.run('::', port=8000, debug=True)
+    app.run('::', port=PORT, debug=True)
 
 
 if __name__ == '__main__':

@@ -1,5 +1,6 @@
 import unittest
 import lib_server
+from macros_server import *
 
 
 class TestCountry(unittest.TestCase):
@@ -13,9 +14,21 @@ class TestCountry(unittest.TestCase):
         with self.assertRaises(IndexError):
             new_country = lib_server.Country(5, 'name', False)
 
-    def test_init_is_infected(self):
+    def test_init_infected(self):
         with self.assertRaises(TypeError):
             new_country = lib_server.Country(5, 'name', 'False')
+
+    def test_id(self):
+        new_country = lib_server.Country(5, 'France', False)
+        self.assertEqual(new_country.id, 5)
+
+    def test_name(self):
+        new_country = lib_server.Country(5, 'France', False)
+        self.assertEqual(new_country.name, 'France')
+
+    def test_infected(self):
+        new_country = lib_server.Country(5, 'France', False)
+        self.assertFalse(new_country.infected)
 
 
 class TestVirus(unittest.TestCase):
@@ -29,7 +42,10 @@ class TestVirus(unittest.TestCase):
     def test_get_id(self):
         with self.assertRaises(IndexError):
             test_id = self.virus.get_id('name')
-        self.assertTrue(self.virus.get_id(lib_server.LIST_COUNTRIES[0]) < len(lib_server.LIST_COUNTRIES))
+        self.assertTrue(self.virus.get_id(LIST_COUNTRIES[0]) < len(LIST_COUNTRIES))
+
+    def test_get_one_id(self):
+        self.assertTrue(self.virus.get_id(LIST_COUNTRIES[0]), 0)
 
     def test_all_info(self):
         self.assertFalse(len(self.virus.countries) == 0)
