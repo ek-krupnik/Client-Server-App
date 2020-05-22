@@ -82,7 +82,8 @@ class EuropeVirus(object):
         for i in range(LINKS_NUMBER):
             country_from = self.get_random_country()
             country_to = self.get_random_country()
-            self.map[country_from.name].add(country_to)
+            if country_to != country_from:
+                self.map[country_from.name].add(country_to)
 
     def get_links(self, country_name):
         if LIST_COUNTRIES.count(country_name) == 0:

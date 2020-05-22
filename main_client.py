@@ -8,8 +8,8 @@ from macros_client import *
 
 def create_parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--host', default='localhost')
-    parser.add_argument('--port', default=8000, type=int)
+    parser.add_argument('--host', default=HOST)
+    parser.add_argument('--port', default=PORT, type=int)
 
     return parser
 
@@ -40,7 +40,7 @@ def is_correct_time(time):
 
 
 def get_name():
-    print('Possible countries : ', end='')
+    print(POSSIBLE_COUNTRIES_MSG, end='')
     print(*LIST_COUNTRIES)
     return input(ASK_COUNTRY_MSG)
 
@@ -72,31 +72,35 @@ def ask_for_days(is_necessary=True):
         throw_and_repeat(ask_for_days, is_necessary)
 
 
+def get_request_str(main_args):
+    return f'http://{main_args.host}:{main_args.port}'
+
+
 def infect_country(main_args):
     country = ask_for_country(True)
-    country_id = requests.post(f'http://{main_args.host}:{main_args.port}/infect', params={'name': country}).text
+    country_id = requests.post(get_request_str(main_args) + HANDLE_INFECT, params={'name': country}).text
     print(f'{country} was infected (ID: {country_id})')
 
 
 def get_info(main_args):
     country = ask_for_country(False)
     if len(country):
-        req_function = 'get_info'
+        req_function = HANDLE_INFO
     else:
-        req_function = 'get_all_info'
+        req_function = HANDLE_ALL_INFO
 
-    status = requests.get(f'http://{main_args.host}:{main_args.port}/{req_function}', params={'name': country}).text
+    status = requests.get(get_request_str(main_args) + f'{req_function}', params={'name': country}).text
     print(status)
 
 
 def go_day(main_args):
     time = ask_for_days()
-    num_days = requests.post(f'http://{main_args.host}:{main_args.port}/go_days', params={'time': time}).text
-    print(f'{num_days} day(s) later ...\n')
+    num_days = requests.post(get_request_str(main_args) + HANDLE_GO_DAYS, params={'time': time}).text
+    print(f'{num_days}' + DAYS_LATER_MSG)
 
 
 def make_new_map(main_args):
-    requests.post(f'http://{main_args.host}:{main_args.port}/make_map')
+    requests.post(get_request_str(main_args) + HANDLE_MAKE_MAP)
 
 
 def draw(maps):
@@ -113,7 +117,7 @@ def draw(maps):
 def get_links(main_args):
     lst_countries = []
     for country in LIST_COUNTRIES:
-        arg_str = requests.get(f'http://{main_args.host}:{main_args.port}/get_links', params={'name': country}).text
+        arg_str = requests.get(get_request_str(main_args) + HANDLE_GET_LINKS, params={'name': country}).text
         lst_countries.append(list(filter(None, re.split(r'\W|\d', arg_str))))
         maps = {country: lst for country, lst in zip(LIST_COUNTRIES, lst_countries)}
     draw(maps)
@@ -144,7 +148,7 @@ def main():
             elif cmd == 'exit':
                 correct_exit()
             else:
-                print(f'Unknown command: {cmd}\n')
+                print(UNKNOWN_COUNTRY_MSG + f'{cmd}\n')
         except KeyboardInterrupt:
             correct_exit()
 

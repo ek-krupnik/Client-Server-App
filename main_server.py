@@ -3,41 +3,41 @@ import lib_server
 from macros_server import *
 
 
-app = flask.Flask('Plague_Inc_Europe')
+app = flask.Flask(APP_NAME)
 virus = lib_server.EuropeVirus()
 
 
-@app.route('/infect', methods=['POST'])
+@app.route(HANDLE_INFECT, methods=['POST'])
 def infect_country():
     country_name = flask.request.args['name']
     id = virus.infect_country(country_name)
     return str(id)
 
 
-@app.route('/get_all_info', methods=['GET'])
+@app.route(HANDLE_ALL_INFO, methods=['GET'])
 def get_all_info():
     return "\n".join(virus.get_all_info())
 
 
-@app.route('/get_info', methods=['GET'])
+@app.route(HANDLE_INFO, methods=['GET'])
 def get_info():
     country = flask.request.args['name']
     return str(virus.get_info(country))
 
 
-@app.route('/make_map', methods=['POST'])
+@app.route(HANDLE_MAKE_MAP, methods=['POST'])
 def make_map():
     virus.make_map()
 
 
-@app.route('/go_days', methods=['POST'])
+@app.route(HANDLE_GO_DAYS, methods=['POST'])
 def go_days():
     time = int(flask.request.args['time'])
     virus.go_days(time)
     return str(time)
 
 
-@app.route('/get_links', methods=['GET'])
+@app.route(HANDLE_GO_DAYS, methods=['GET'])
 def get_links():
     country_name = flask.request.args['name']
     return str(virus.get_links(country_name))
