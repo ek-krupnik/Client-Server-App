@@ -72,14 +72,10 @@ def ask_for_days(is_necessary=True):
         throw_and_repeat(ask_for_days, is_necessary)
 
 
-def get_request_str(main_args):
-    return f'http://{main_args.host}:{main_args.port}'
-
-
 def infect_country(main_args):
     country = ask_for_country(True)
     country_id = requests.post(get_request_str(main_args) + HANDLE_INFECT, params={'name': country}).text
-    print(f'{country} was infected (ID: {country_id})')
+    print(get_infected_msg(country, country_id))
 
 
 def get_info(main_args):

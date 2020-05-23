@@ -1,4 +1,5 @@
-PORT = 8000
+from common_macros import *
+
 HOST = 'localhost'
 
 START = 'start the game by infecting the country'
@@ -15,17 +16,18 @@ PARTICULAR_MSG = 'Do you want to get info about particular country? (Y/N)\n-----
 ASK_DAYS_MSG = 'Please, write number of days here:\n----------> '
 ASK_ACTION_MSG = 'Enter action:\n----------> '
 
-LIST_COUNTRIES = ['Germany', 'France', 'Italy', 'Spain', 'Poland', 'GreatBritain', 'Portugal', 'Austria']
 COMMAND_DESCRIPTIONS = {'start': START, 'get info': GET_INFO, 'get links': GET_LINKS, 'go day': GO_DAY,
                         'help': HELP, 'exit': EXIT}
 
 POSSIBLE_COUNTRIES_MSG = 'Possible countries : '
 UNKNOWN_COUNTRY_MSG = 'Unknown command: '
-DAYS_LATER_MSG =  'day(s) later ...\n'
+DAYS_LATER_MSG = 'day(s) later ...\n'
 
-HANDLE_INFECT = '/infect'
-HANDLE_INFO = '/get_info'
-HANDLE_ALL_INFO = '/get_all_info'
-HANDLE_GO_DAYS = '/go_days'
-HANDLE_MAKE_MAP = '/make_map'
-HANDLE_GET_LINKS = '/get_links'
+
+def get_infected_msg(country, country_id):
+    return f'{country} was infected (ID: {country_id})'
+
+
+def get_request_str(main_args):
+    return f'http://{main_args.host}:{main_args.port}'
+

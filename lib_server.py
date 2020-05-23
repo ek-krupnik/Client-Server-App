@@ -46,7 +46,7 @@ class EuropeVirus(object):
         return [str(country) for country in self.countries]
 
     def get_info(self, country):
-        if not isinstance(country, Country):
+        if not isinstance(country, str):
             raise TypeError(TYPE_ERROR_MSG['get_info'])
 
         id = self.get_id(country)

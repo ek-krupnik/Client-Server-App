@@ -21,8 +21,8 @@ def get_all_info():
 
 @app.route(HANDLE_INFO, methods=['GET'])
 def get_info():
-    country = flask.request.args['name']
-    return str(virus.get_info(country))
+    country_name = flask.request.args['name']
+    return str(virus.get_info(country_name))
 
 
 @app.route(HANDLE_MAKE_MAP, methods=['POST'])
